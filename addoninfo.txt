@@ -1,0 +1,7 @@
+"AddonInfo"
+{
+		"tagmar"
+	{
+		"MaxPlayers"		"16"
+	}
+}
