@@ -3,7 +3,7 @@
 ---------------------------------------------------------------------------
 -- Event: Game state change handler
 ---------------------------------------------------------------------------
-function CHoldoutGameMode:OnGameRulesStateChange()
+function COverthrowGameMode:OnGameRulesStateChange()
 	local nNewState = GameRules:State_Get()
 	--print( "OnGameRulesStateChange: " .. nNewState )
 
@@ -13,26 +13,20 @@ function CHoldoutGameMode:OnGameRulesStateChange()
 
 	if nNewState == DOTA_GAMERULES_STATE_PRE_GAME then
 		local numberOfPlayers = PlayerResource:GetPlayerCount()
-		if numberOfPlayers > 7 then
-			--self.TEAM_KILLS_TO_WIN = 25
-			nCOUNTDOWNTIMER = 901
-		elseif numberOfPlayers > 4 and numberOfPlayers <= 7 then
+		if numberOfPlayers >= 1 then
+			self.TEAM_KILLS_TO_WIN = 34
+			nCOUNTDOWNTIMER = 3601
+--/		elseif numberOfPlayers > 4 and numberOfPlayers <= 7 then
 			--self.TEAM_KILLS_TO_WIN = 20
-			nCOUNTDOWNTIMER = 721
-		else
-			--self.TEAM_KILLS_TO_WIN = 15
-			nCOUNTDOWNTIMER = 601
-		end
-		if GetMapName() == "tagmar" then
-			self.TEAM_KILLS_TO_WIN = 25
---		elseif GetMapName() == "desert_duo" then
---			self.TEAM_KILLS_TO_WIN = 30
---		elseif GetMapName() == "desert_quintet" then
---			self.TEAM_KILLS_TO_WIN = 50
---		elseif GetMapName() == "temple_quartet" then
---			self.TEAM_KILLS_TO_WIN = 50
+--			nCOUNTDOWNTIMER = 721
 --		else
---			self.TEAM_KILLS_TO_WIN = 30
+			--self.TEAM_KILLS_TO_WIN = 15
+--			nCOUNTDOWNTIMER = 601
+--		end
+--		if GetMapName() == "tagmar" then
+--			self.TEAM_KILLS_TO_WIN = 18
+--		else
+--			self.TEAM_KILLS_TO_WIN = 33
 		end
 		--print( "Kills to win = " .. tostring(self.TEAM_KILLS_TO_WIN) )
 
@@ -52,7 +46,7 @@ end
 --------------------------------------------------------------------------------
 -- Event: OnNPCSpawned
 --------------------------------------------------------------------------------
-function CHoldoutGameMode:OnNPCSpawned( event )
+function COverthrowGameMode:OnNPCSpawned( event )
 	local spawnedUnit = EntIndexToHScript( event.entindex )
 	if spawnedUnit:IsRealHero() then
 		-- Destroys the last hit effects
@@ -76,7 +70,7 @@ end
 --------------------------------------------------------------------------------
 -- Event: BountyRunePickupFilter
 --------------------------------------------------------------------------------
-function CHoldoutGameMode:BountyRunePickupFilter( filterTable )
+function COverthrowGameMode:BountyRunePickupFilter( filterTable )
       filterTable["xp_bounty"] = 2*filterTable["xp_bounty"]
       filterTable["gold_bounty"] = 2*filterTable["gold_bounty"]
       return true
@@ -85,7 +79,7 @@ end
 ---------------------------------------------------------------------------
 -- Event: OnTeamKillCredit, see if anyone won
 ---------------------------------------------------------------------------
-function CHoldoutGameMode:OnTeamKillCredit( event )
+function COverthrowGameMode:OnTeamKillCredit( event )
 --	print( "OnKillCredit" )
 --	DeepPrint( event )
 
@@ -123,7 +117,7 @@ end
 ---------------------------------------------------------------------------
 -- Event: OnEntityKilled
 ---------------------------------------------------------------------------
-function CHoldoutGameMode:OnEntityKilled( event )
+function COverthrowGameMode:OnEntityKilled( event )
 	local killedUnit = EntIndexToHScript( event.entindex_killed )
 	local killedTeam = killedUnit:GetTeam()
 	local hero = EntIndexToHScript( event.entindex_attacker )
@@ -183,15 +177,15 @@ function CHoldoutGameMode:OnEntityKilled( event )
 				--print("Set time for Wraith King respawn disabled")
 				return nil
 			else
-				CHoldoutGameMode:SetRespawnTime( killedTeam, killedUnit, extraTime )
+				COverthrowGameMode:SetRespawnTime( killedTeam, killedUnit, extraTime )
 			end
 		else
-			CHoldoutGameMode:SetRespawnTime( killedTeam, killedUnit, extraTime )
+			COverthrowGameMode:SetRespawnTime( killedTeam, killedUnit, extraTime )
 		end
 	end
 end
 
-function CHoldoutGameMode:SetRespawnTime( killedTeam, killedUnit, extraTime )
+function COverthrowGameMode:SetRespawnTime( killedTeam, killedUnit, extraTime )
 	--print("Setting time for respawn")
 	if killedTeam == self.leadingTeam and self.isGameTied == false then
 		killedUnit:SetTimeUntilRespawn( 20 + extraTime )
@@ -204,7 +198,7 @@ end
 --------------------------------------------------------------------------------
 -- Event: OnItemPickUp
 --------------------------------------------------------------------------------
-function CHoldoutGameMode:OnItemPickUp( event )
+function COverthrowGameMode:OnItemPickUp( event )
 	local item = EntIndexToHScript( event.ItemEntityIndex )
 	local owner = EntIndexToHScript( event.HeroEntityIndex )
 	r = 300
@@ -217,7 +211,7 @@ function CHoldoutGameMode:OnItemPickUp( event )
 	elseif event.itemname == "item_treasure_chest" then
 		--print("Special Item Picked Up")
 		DoEntFire( "item_spawn_particle_" .. self.itemSpawnIndex, "Stop", "0", 0, self, self )
-		CHoldoutGameMode:SpecialItemAdd( event )
+		COverthrowGameMode:SpecialItemAdd( event )
 		UTIL_Remove( item ) -- otherwise it pollutes the player inventory
 	end
 end
@@ -226,9 +220,9 @@ end
 --------------------------------------------------------------------------------
 -- Event: OnNpcGoalReached
 --------------------------------------------------------------------------------
-function CHoldoutGameMode:OnNpcGoalReached( event )
+function COverthrowGameMode:OnNpcGoalReached( event )
 	local npc = EntIndexToHScript( event.npc_entindex )
 	if npc:GetUnitName() == "npc_dota_treasure_courier" then
-		CHoldoutGameMode:TreasureDrop( npc )
+		COverthrowGameMode:TreasureDrop( npc )
 	end
 end

@@ -11,7 +11,7 @@
 		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_DONT_RESUME_ATTACK"
 		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_FRIENDLY"
 		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO"
-		"Model"							"models/props_gameplay/gold_bag.vmdl"
+		"Model"							"models/props_gameplay/gold_coin001.vmdl"
 		"ItemKillable"					"0"
 		
 		// Stats
@@ -28,25 +28,24 @@
 		"ItemStackable"					"1"
 		"ItemShareability"				"ITEM_FULLY_SHAREABLE"
 		"ItemPermanent"					"0"
-		"ItemInitialCharges"			"1"
+		"ItemInitialCharges"			"0"
 		"ItemKillable"					"0"
+		"ItemCastOnPickup"				"1"
 	}
-
 	//=================================================================================================================
-	// Health Potion
+	// Treasure Chest
 	//=================================================================================================================
-	"item_health_potion"
+	"item_treasure_chest"
 	{
 		// General
 		//-------------------------------------------------------------------------------------------------------------
-		"BaseClass"						"item_lua"
-		"AbilityTextureName"			"item_health_potion"
-		"ScriptFile"					"items/item_health_potion"
-		
-		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+		"ID"							"1001"
+		"AbilityName"					"item_treasure_chest"
+		"BaseClass"						"item_bag_of_gold"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_ITEM"
 		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_FRIENDLY"
 		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO"
-		"Model"							"models/props_gameplay/bottle_rejuvenation.vmdl"
+		"Model"							"models/props_gameplay/treasure_chest001.vmdl"
 		"ItemKillable"					"0"
 		
 		// Stats
@@ -63,113 +62,87 @@
 		"ItemStackable"					"1"
 		"ItemShareability"				"ITEM_FULLY_SHAREABLE"
 		"ItemPermanent"					"0"
-		"ItemInitialCharges"			"1"
+		"ItemInitialCharges"			"0"
 		"ItemKillable"					"0"
 		"ItemCastOnPickup"				"1"
+	}
 
-		// Special
-		//-------------------------------------------------------------------------------------------------------------
-		"AbilitySpecial"
+
+	"item_crown"
+	{
+		"ID"						"9901"
+		"AbilityName"					"item_crown"
+		"BaseClass"						"item_datadriven"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		//"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO"
+		"Model"							"models/props_gameplay/crown001.vmdl"
+		"ItemKillable"					"0"
+		"AbilityTextureName"				"crown"
+		"TextureName"	"king_crown"
+
+ 
+		// Item Info
+		//---------------------------------------------------------------------------------------------------------
+		"ItemCost"					"1818"
+		"ItemDroppable"					"1"
+		"ItemSellable"					"1"
+		"ItemKillable"					"1"
+		"ItemQuality"					"epic"
+		"ItemShopTags"					"crown"
+		"ItemAliases"					"crown"
+		"ItemShareability"				"ITEM_NOT_SHAREABLE"
+		"ItemDeclarations"				"DECLARE_PURCHASES_TO_TEAMMATES | DECLARE_PURCHASES_TO_SPECTATORS | DECLARE_PURCHASES_IN_SPEECH"
+				
+		"ItemPurchasable"				"1"
+
+
+//		"AbilitySpecial"
+//		{
+//			"01"
+//			{
+//				"var_type"				"FIELD_INTEGER"
+//				"total_heal"			"1700"
+//			}
+//		} 
+						
+		"OnOwnerDied"
 		{
-			"01"
+			"RunScript"
 			{
-				"var_type"				"FIELD_INTEGER"
-				"hp_restore_pct"		"20"
+				"ScriptFile"			"scripts/vscripts/itemfunctions.lua"
+				"Function"			"DropItemOnDeath"
 			}
 		}
-	}
 
-	//=================================================================================================================
-	// Mana Potion
-	//=================================================================================================================
-	"item_mana_potion"
+		"Modifiers"
 	{
-		// General
-		//-------------------------------------------------------------------------------------------------------------
-		"BaseClass"						"item_lua"
-		"AbilityTextureName"			"item_mana_potion"
-		"ScriptFile"					"items/item_mana_potion"
-		
-		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
-		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_FRIENDLY"
-		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO"
-		"Model"							"models/props_gameplay/bottle_mango001.vmdl"
-		"ItemKillable"					"0"
-		
-		// Stats
-		//-------------------------------------------------------------------------------------------------------------
-		"AbilityCastRange"				"100"
-		"AbilityCastPoint"				"0.0"
-		
-		// Item Info
-		//-------------------------------------------------------------------------------------------------------------
-		"ItemCost"						"99999"
-		"ItemPurchasable"				"0"
-		"ItemShopTags"					"consumable"
-		"ItemQuality"					"consumable"
-		"ItemStackable"					"1"
-		"ItemShareability"				"ITEM_FULLY_SHAREABLE"
-		"ItemPermanent"					"0"
-		"ItemInitialCharges"			"1"
-		"ItemKillable"					"0"
-		"ItemCastOnPickup"				"1"
+    "item_custom_modifier"
+    {
+        "Passive" "1"  
+        "IsHidden" "0"  
+     //   "Attributes" "MODIFIER_ATTRIBUTE_MULTIPLE" //This makes duplicate items stack their properties
+        "Properties"
+        {
+  //          "MODIFIER_PROPERTY_MOVESPEED_BONUS_CONSTANT" "%movement_speed"
+   //         "MODIFIER_PROPERTY_EVASION_CONSTANT" "%evasion"
+            "MODIFIER_PROPERTY_STATS_STRENGTH_BONUS" "18"
+            "MODIFIER_PROPERTY_STATS_AGILITY_BONUS" "18"
+            "MODIFIER_PROPERTY_STATS_INTELLECT_BONUS" "18"
+ //           "MODIFIER_PROPERTY_BASEDAMAGEOUTGOING_PERCENTAGE" "%damage_bonus_percent"
+        }
 
-		// Special
-		//-------------------------------------------------------------------------------------------------------------
-		"AbilitySpecial"
-		{
-			"01"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"mana_restore_pct"		"20"
-			}
-		}
+    }
+}
+
+				
+
+
 	}
 
-	
-	//=================================================================================================================
-	// Holdout Tombstone
-	//=================================================================================================================
-	"item_tombstone"
-	{
-		// General
-		//-------------------------------------------------------------------------------------------------------------
-		"AbilityName"					"item_tombstone"
-		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_CHANNELLED | DOTA_ABILITY_BEHAVIOR_DONT_RESUME_ATTACK"
-		"Model"							"models/props_gameplay/tombstoneb01.vmdl"
-		"PingOverrideText"				"DOTA_Chat_Tombstone_Pinged"
-		"precache"
-		{
-			"particle_folder" "particles/units/heroes/hero_morphling"
-		}
 
-		
-		// Stats
-		//-------------------------------------------------------------------------------------------------------------
-		"AbilityCastRange"				"100"
-		"AbilityCastPoint"				"0.0"
-		"AbilityChannelTime"			"6.5"
-		
-		// Item Info
-		//-------------------------------------------------------------------------------------------------------------
-		"ItemCost"						"99999"
-		"ItemPurchasable"				"0"
-		"ItemShopTags"					"consumable"
-		"ItemQuality"					"consumable"
-		"ItemStackable"					"1"
-		"ItemShareability"				"ITEM_FULLY_SHAREABLE"
-		"ItemPermanent"					"0"
-		"ItemInitialCharges"			"1"
-		"ItemCastOnPickup"				"1"
-		"ItemKillable"					"0"
-	}
 
-	"item_recipe_rapier"
-	{
-		// General
-		//-------------------------------------------------------------------------------------------------------------
-		"ID"							"132"
 
-		"ItemRecipe"					"0"
-	}
+
+
+
 }

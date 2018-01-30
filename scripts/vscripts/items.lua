@@ -1,14 +1,14 @@
 --[[ items.lua ]]
 
 --Spawns Bags of Gold in the middle
-function CHoldoutGameMode:ThinkGoldDrop()
+function COverthrowGameMode:ThinkGoldDrop()
 	local r = RandomInt( 1, 100 )
-	if r > ( 100 - self.m_GoldDropPercent ) then
+	if r > ( 100 - self.m_DropPercent ) then
 		self:SpawnGold()
 	end
 end
 
-function CHoldoutGameMode:SpawnGold()
+function COverthrowGameMode:SpawnGold()
 	local overBoss = Entities:FindByName( nil, "@overboss" )
 	local throwCoin = nil
 	local throwCoin2 = nil
@@ -27,7 +27,7 @@ function CHoldoutGameMode:SpawnGold()
 	end
 end
 
-function CHoldoutGameMode:SpawnGoldEntity( spawnPoint )
+function COverthrowGameMode:SpawnGoldEntity( spawnPoint )
 	EmitGlobalSound("Item.PickUpGemWorld")
 	local newItem = CreateItem( "item_bag_of_gold", nil, nil )
 	local drop = CreateItemOnPositionForLaunch( spawnPoint, newItem )
@@ -38,7 +38,7 @@ end
 
 
 --Removes Bags of Gold after they expire
-function CHoldoutGameMode:KillLoot( item, drop )
+function COverthrowGameMode:KillLoot( item, drop )
 
 	if drop:IsNull() then
 		return
@@ -54,7 +54,7 @@ function CHoldoutGameMode:KillLoot( item, drop )
 	UTIL_Remove( drop )
 end
 
-function CHoldoutGameMode:SpecialItemAdd( event )
+function COverthrowGameMode:SpecialItemAdd( event )
 	local item = EntIndexToHScript( event.ItemEntityIndex )
 	local owner = EntIndexToHScript( event.HeroEntityIndex )
 	local hero = owner:GetClassname()
@@ -83,7 +83,9 @@ function CHoldoutGameMode:SpecialItemAdd( event )
 		"item_medallion_of_courage",
 		"item_soul_ring",
 		"item_gem",
-		"item_orb_of_venom"
+		"item_orb_of_venom",
+		
+		"item_crown"	
 	}
 	local tier2 = 
 	{
@@ -181,7 +183,7 @@ function CHoldoutGameMode:SpecialItemAdd( event )
 	CustomGameEventManager:Send_ServerToAllClients( "overthrow_item_drop", overthrow_item_drop )
 end
 
-function CHoldoutGameMode:ThinkSpecialItemDrop()
+function COverthrowGameMode:ThinkSpecialItemDrop()
 	-- Stop spawning items after 15
 	if self.nNextSpawnItemNumber >= 15 then
 		return
@@ -206,7 +208,7 @@ function CHoldoutGameMode:ThinkSpecialItemDrop()
 	end
 end
 
-function CHoldoutGameMode:PlanNextSpawn()
+function COverthrowGameMode:PlanNextSpawn()
 	local missingSpawnPoint =
 	{
 		origin = "0 0 384",
@@ -234,7 +236,7 @@ function CHoldoutGameMode:PlanNextSpawn()
 	self.itemSpawnIndex = r
 end
 
-function CHoldoutGameMode:WarnItem()
+function COverthrowGameMode:WarnItem()
 	-- find the spawn point
 	self:PlanNextSpawn()
 
@@ -255,7 +257,7 @@ function CHoldoutGameMode:WarnItem()
 	visionRevealer:SetContextThink( "KillVisionParticle", function() return trueSight:RemoveSelf() end, 35 )
 end
 
-function CHoldoutGameMode:SpawnItem()
+function COverthrowGameMode:SpawnItem()
 	-- notify everyone
 	CustomGameEventManager:Send_ServerToAllClients( "item_has_spawned", {} )
 	EmitGlobalSound( "powerup_05" )
@@ -273,12 +275,12 @@ function CHoldoutGameMode:SpawnItem()
 	treasureCourier:Attribute_SetIntValue( "particleID", particleTreasure )
 end
 
-function CHoldoutGameMode:ForceSpawnItem()
+function COverthrowGameMode:ForceSpawnItem()
 	self:WarnItem()
 	self:SpawnItem()
 end
 
-function CHoldoutGameMode:KnockBackFromTreasure( center, radius, knockback_duration, knockback_distance, knockback_height )
+function COverthrowGameMode:KnockBackFromTreasure( center, radius, knockback_duration, knockback_distance, knockback_height )
 	local targetType = bit.bor( DOTA_UNIT_TARGET_CREEP, DOTA_UNIT_TARGET_HERO )
 	local knockBackUnits = FindUnitsInRadius( DOTA_TEAM_NOTEAM, center, nil, radius, DOTA_UNIT_TARGET_TEAM_BOTH, targetType, DOTA_UNIT_TARGET_FLAG_NONE, FIND_ANY_ORDER, false )
  
@@ -300,7 +302,7 @@ function CHoldoutGameMode:KnockBackFromTreasure( center, radius, knockback_durat
 end
 
 
-function CHoldoutGameMode:TreasureDrop( treasureCourier )
+function COverthrowGameMode:TreasureDrop( treasureCourier )
 	--Create the death effect for the courier
 	local spawnPoint = treasureCourier:GetInitialGoalEntity():GetAbsOrigin()
 	spawnPoint.z = 400
@@ -311,7 +313,6 @@ function CHoldoutGameMode:TreasureDrop( treasureCourier )
 	ParticleManager:SetParticleControlOrientation( deathEffects, 0, treasureCourier:GetForwardVector(), treasureCourier:GetRightVector(), treasureCourier:GetUpVector() )
 	EmitGlobalSound( "lockjaw_Courier.Impact" )
 	EmitGlobalSound( "lockjaw_Courier.gold_big" )
-
 
 	--Spawn the treasure chest at the selected item spawn location
 	local newItem = CreateItem( "item_treasure_chest", nil, nil )
@@ -329,7 +330,7 @@ function CHoldoutGameMode:TreasureDrop( treasureCourier )
 	UTIL_Remove( treasureCourier )
 end
 
-function CHoldoutGameMode:ForceSpawnGold()
+function COverthrowGameMode:ForceSpawnGold()
 	self:SpawnGold()
 end
 
