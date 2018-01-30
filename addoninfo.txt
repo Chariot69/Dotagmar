@@ -1,7 +1,17 @@
 "AddonInfo"
 {
-		"tagmar"
+	maps			"tagmar mission01"
+	"IsPlayable"	"1"
+	"HeroGuidesSupported" "1"
+
+	"tagmar"
 	{
-		"MaxPlayers"		"16"
+					"MaxPlayers"                    "6"
 	}
+	"mission01"
+	{
+					"MaxPlayers"                    "5"
+	}
+
+
 }
