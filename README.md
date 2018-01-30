@@ -1,2 +1,2 @@
 # Dotagmar
-MOd DOta 2 + Tagmar
+Mod DOta 2 + Tagmar RPG
